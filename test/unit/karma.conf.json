@@ -1,0 +1,8 @@
+
+{
+  "files": [
+    "bower_components/evt/index.js",
+    "index.js",
+    "test/unit/test.js"
+  ]
+}
