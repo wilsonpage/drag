@@ -34,29 +34,21 @@ suite('Drag', function() {
 
   test('it listens for touch events', function() {
     sinon.assert.calledWith(this.els.container.addEventListener, 'touchstart');
-    sinon.assert.calledWith(this.els.container.addEventListener, 'touchend');
-    sinon.assert.calledWith(this.els.handle.addEventListener, 'touchmove');
-  });
-
-  test('it sets up transition styles', function() {
-    assert.equal(this.els.handle.style.transitionTimingFunction, 'linear');
-    assert.equal(this.els.handle.style.transitionProperty, 'transform');
-    assert.equal(this.els.handle.style.willChange, 'transform');
   });
 
   suite('Drag#onTouchMove()', function() {
     setup(function() {
-      var event = { touches: [{ clientX: 100, clientY: 100 }] };
+      var event = { type: 'touchstart', touches: [{ clientX: 100, clientY: 100 }] };
       this.drag.onTouchStart(event);
       sinon.stub(this.drag, 'move');
     });
 
     test('It moves the handle', function() {
-      var event = { touches: [{ clientX: 110, clientY: 110 }] };
+      var event = { type: 'touchmove', touches: [{ clientX: 110, clientY: 110 }] };
       this.drag.onTouchMove(event);
       sinon.assert.calledWith(this.drag.move, { x: 10, y: 10 });
 
-      event = { touches: [{ clientX: 100, clientY: 100 }] };
+      event = { type: 'touchmove', touches: [{ clientX: 100, clientY: 100 }] };
       this.drag.onTouchMove(event);
       sinon.assert.calledWith(this.drag.move, { x: -10, y: -10 });
     });
@@ -67,6 +59,7 @@ suite('Drag', function() {
       sinon.spy(this.drag, 'emit');
 
       var event = {
+        type: 'touchstart',
         touches: [{ clientX: 100, clientY: 100 }],
         timeStamp: Date.now()
       };
@@ -142,7 +135,6 @@ suite('Drag', function() {
       sinon.spy(this.drag, 'emit');
       this.drag.translate({ x: 50, y: 0 });
       sinon.assert.calledWith(this.drag.emit, 'translate', {
-        duration: this.drag.slideDuration,
         position: {
           px: { x: 50, y: 0 },
           ratio: { x: 1, y: 0 }
