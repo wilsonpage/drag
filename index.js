@@ -85,6 +85,7 @@ Drag.prototype.onTouchStart = function(e) {
 };
 
 Drag.prototype.onTouchMove = function(e) {
+  e.preventDefault();
   e = ~e.type.indexOf('mouse') ? e : e.touches[0];
 
   var delta = {
